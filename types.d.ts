@@ -6,3 +6,9 @@ type ProductType = {
     __v?: number | undefined;
     images?: string[];
 };
+
+type CategoryType = {
+    categorie: string;
+    _id: string;
+    parent: { categorie: string; _id: string };
+};

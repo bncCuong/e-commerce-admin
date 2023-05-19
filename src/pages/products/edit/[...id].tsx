@@ -1,4 +1,4 @@
-import { ProductFrom } from '@/components';
+import { Card, ProductFrom } from '@/components';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -22,12 +22,12 @@ const EditPage = (props: Props) => {
     return (
         <>
             <ProductFrom
+                images={product.images}
                 name={product.name}
                 price={product.price}
                 description={product.description}
                 _id={id as string}
             />
-            ;
         </>
     );
 };

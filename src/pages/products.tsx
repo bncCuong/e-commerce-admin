@@ -23,6 +23,7 @@ const Products = (props: Props) => {
                 {products.map((product) => {
                     return (
                         <Card
+                            images={product.images}
                             key={product._id}
                             name={product.name}
                             _id={product._id}

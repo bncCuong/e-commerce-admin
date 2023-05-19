@@ -1,13 +1,14 @@
 import { ChangeEventHandler } from 'react';
+import { FieldErrors } from 'react-hook-form';
 
 type Props = {
     placeholder: string;
     label: string;
     type: string;
-    isError: any;
+    isError?: any;
     require?: boolean;
     registee: any;
-    name: string;
+    name?: string;
     exitingValue?: string | number;
 };
 

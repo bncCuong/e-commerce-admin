@@ -3,6 +3,7 @@ import {
     BuildingLibraryIcon,
     Cog8ToothIcon,
     HomeIcon,
+    ListBulletIcon,
     QueueListIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
@@ -24,7 +25,11 @@ export const Navbar = (props: Props) => {
                     <HomeIcon width={24} /> Dashboard
                 </Link>
                 <Link className={`${router.pathname === '/products' ? isActive : notActive}`} href="/products">
-                    <ArchiveBoxIcon width={24} /> Products
+                    <ArchiveBoxIcon width={24} />
+                    Products
+                </Link>
+                <Link className={`${router.pathname === '/categories' ? isActive : notActive}`} href="/categories">
+                    <ListBulletIcon width={24} /> Categories
                 </Link>
                 <Link className={`${router.pathname === '/oders' ? isActive : notActive}`} href="/oders">
                     <QueueListIcon width={24} /> Oders

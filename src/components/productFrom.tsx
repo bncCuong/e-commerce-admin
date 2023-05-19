@@ -12,7 +12,7 @@ type FormValue = {
     description?: string;
     price?: number;
     _id?: string;
-    image?: string;
+    images?: string[];
 };
 
 export const ProductFrom = ({
@@ -20,7 +20,7 @@ export const ProductFrom = ({
     description: existingDescription,
     price: existingPrice,
     _id,
-    image: existingImage,
+    images: existingImage,
 }: FormValue) => {
     const router = useRouter();
     const [backToProduct, setBackToProduct] = useState<boolean>(false);
@@ -34,6 +34,9 @@ export const ProductFrom = ({
     } = useForm<FormValue>();
 
     const addProductSubmitHanler: SubmitHandler<FormValue> = async (data) => {
+        if (images.length > 0) {
+            data['images'] = images;
+        }
         if (_id) {
             //update product
             await axios.put('/api/products', { ...data, _id });
@@ -65,9 +68,12 @@ export const ProductFrom = ({
     };
     return (
         <Layout>
-            <h1>{_id ? 'Edit product' : 'Add new product'}</h1>
-            <form onSubmit={handleSubmit(addProductSubmitHanler)}>
-                {!!images.length && <Card images={images} />}
+            <h1 className="font-bold text-4xl bg-gradient-to-br from-blue-600 via-purple-600 to-pink-700 bg-clip-text text-transparent mb-10 ">
+                {_id ? 'Edit product' : 'Add new product'}
+            </h1>
+            <form onSubmit={handleSubmit(addProductSubmitHanler)} className="ml-10">
+                {(!!images.length || _id) && <Card images={images} _id={_id} />}
+
                 <Input
                     exitingValue={existingName}
                     require={existingName ? false : true}
@@ -98,7 +104,7 @@ export const ProductFrom = ({
                     label="Description"
                     name="description"
                 />
-                {_id ? (
+                {!_id ? (
                     ''
                 ) : (
                     <div className="">
