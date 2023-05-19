@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { Layout } from '@/components';
+import { Card, Layout } from '@/components';
 import { Input, Button } from '@/utils';
 import axios from 'axios';
 import { ArrowUpOnSquareIcon } from '@heroicons/react/24/outline';
-import Image from 'next/image';
+import CricleLoader from 'react-spinners/CircleLoader';
 
 type FormValue = {
     name?: string;
@@ -25,6 +25,7 @@ export const ProductFrom = ({
     const router = useRouter();
     const [backToProduct, setBackToProduct] = useState<boolean>(false);
     const [images, setImages] = useState<string[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
     const {
         register,
         handleSubmit,
@@ -47,6 +48,8 @@ export const ProductFrom = ({
         router.push('/products');
     }
     const onUpLoadImage = async (ev: any) => {
+        setLoading(true);
+
         const files = ev.target?.files;
         if (files.length > 0) {
             const data = new FormData();
@@ -58,17 +61,13 @@ export const ProductFrom = ({
                 return [...prevImage, ...res.data.links];
             });
         }
+        setLoading(false);
     };
     return (
         <Layout>
             <h1>{_id ? 'Edit product' : 'Add new product'}</h1>
             <form onSubmit={handleSubmit(addProductSubmitHanler)}>
-                {!!images.length &&
-                    images.map((image) => (
-                        <div key={image} className="w-14 h-14 ">
-                            <img src={image} alt="product image" width={50} height={60} />
-                        </div>
-                    ))}
+                {!!images.length && <Card images={images} />}
                 <Input
                     exitingValue={existingName}
                     require={existingName ? false : true}
@@ -107,10 +106,13 @@ export const ProductFrom = ({
                         <label className="inline-block">
                             <input type="file" className="hidden" onChange={onUpLoadImage} />
                             <p className="w-24 h-24 bg-slate-400/70 rounded-md flex items-center justify-center text-sm font-medium cursor-pointer gap-1 mb-4">
-                                <span>
-                                    <ArrowUpOnSquareIcon width={16} />
-                                </span>
-                                Upload
+                                {loading ? (
+                                    <CricleLoader size={40} loading={loading} color={'#2463eb'} />
+                                ) : (
+                                    <span>
+                                        <ArrowUpOnSquareIcon width={16} /> Upload
+                                    </span>
+                                )}
                             </p>
                         </label>
                     </div>

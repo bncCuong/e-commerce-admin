@@ -1,4 +1,4 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
+
 
 import multiparty from 'multiparty';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
@@ -7,12 +7,15 @@ import mime from 'mime-types';
 
 //file system library
 import fs from 'fs';
+import { mongooseConnect } from '../../../lib/mongoose';
 
-const bucketName = 'bnc.e-commerce';
+const bucketName = 'bnc-ecommerce-web';
 
-export default async function uploadImage(req: NextApiRequest, res: NextApiResponse) {
+export default async function uploadImage(req, res) {
+    // await mongooseConnect();
+//   await isAdminRequest(req,res);
     const form = new multiparty.Form();
-    const { fields, files } = await new Promise((resolve, reject) => {
+    const { fields , files } = await new Promise((resolve, reject) => {
         form.parse(req, (err, fields, files) => {
             if (err) reject(err);
             resolve({ fields, files });
@@ -20,10 +23,10 @@ export default async function uploadImage(req: NextApiRequest, res: NextApiRespo
     });
 
     const client = new S3Client({
-        region: 'ap-southeast-2',
+        region: 'ap-southeast-1',
         credentials: {
-            accessKeyId: process.env.S3_ACCSES_KEY as any,
-            secretAccessKey: process.env.S3_SECRET_ACCESS_KEY as any,
+            accessKeyId: process.env.S3_ACCSES_KEY ,
+            secretAccessKey: process.env.S3_SECRET_ACCESS_KEY ,
         },
     });
     const links = [];
@@ -33,17 +36,16 @@ export default async function uploadImage(req: NextApiRequest, res: NextApiRespo
 
         //đặt lại tên cho file ảnh
         const newFileName = Date.now() + '.' + ext;
-        client.send(
+        await client.send(
             new PutObjectCommand({
                 Bucket: bucketName,
                 Key: newFileName,
                 Body: fs.readFileSync(file.path),
                 ACL: 'public-read',
-                ContentType: mime.lookup(file.path) as any,
+                ContentType: mime.lookup(file.path) 
             }),
         );
-        // const link = `https://${bucketName}.s3.amazonaws.com/${newFileName}`;
-        const link = `https://s3.ap-southeast-2.amazonaws.com/${bucketName}/${newFileName}`;
+        const link = `https://${bucketName}.s3.amazonaws.com/${newFileName}`;
         links.push(link);
     }
     return res.json({ links });

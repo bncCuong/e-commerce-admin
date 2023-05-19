@@ -18,6 +18,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "lib/mongoose.js", "lib/mongodb.js", "models/Product.js", "src/pages/api/upload.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "lib/mongoose.js", "lib/mongodb.js", "models/Product.js", "src/pages/api/upload.js"],
   "exclude": ["node_modules"]
 }

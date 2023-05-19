@@ -21,7 +21,13 @@ const EditPage = (props: Props) => {
 
     return (
         <>
-            <ProductFrom name={product.name} price={product.price} description={product.description} _id={id} />;
+            <ProductFrom
+                name={product.name}
+                price={product.price}
+                description={product.description}
+                _id={id as string}
+            />
+            ;
         </>
     );
 };

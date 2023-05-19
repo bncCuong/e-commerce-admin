@@ -1,5 +1,4 @@
 import { useSession, signIn, signOut } from 'next-auth/react';
-import { ReactElement } from 'react';
 import { Navbar } from './navbar';
 
 type Props = {

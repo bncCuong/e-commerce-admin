@@ -20,7 +20,7 @@ export default function Home() {
                             Welcome, <span className="font-bold text-xl">{session?.user?.name}</span>
                         </p>
                         <Image
-                            src={session?.user?.image}
+                            src={session?.user?.image as string}
                             alt="user avtar"
                             className="rounded-full"
                             width={40}
