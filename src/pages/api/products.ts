@@ -25,8 +25,8 @@ export default async function createProduct(req: NextApiRequest, res: NextApiRes
     }
 
     if (method === 'PUT') {
-        const { name, price, description, _id } = req.body;
-        await Product.updateOne({ _id }, { name, price, description });
+        const { name, price, description, _id, images } = req.body;
+        await Product.updateOne({ _id }, { name, price, description, images });
         res.json(true);
     }
 

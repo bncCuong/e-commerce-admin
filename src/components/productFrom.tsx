@@ -13,6 +13,7 @@ type FormValue = {
     price?: number;
     _id?: string;
     images?: string[];
+    existingImages?: string[];
 };
 
 export const ProductFrom = ({
@@ -20,12 +21,13 @@ export const ProductFrom = ({
     description: existingDescription,
     price: existingPrice,
     _id,
-    images: existingImage,
-}: FormValue) => {
+    existingImages,
+}: FormValue | ProductType) => {
     const router = useRouter();
     const [backToProduct, setBackToProduct] = useState<boolean>(false);
     const [images, setImages] = useState<string[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
+    const [uploadPage, setUploadPage] = useState<boolean>(false);
     const {
         register,
         handleSubmit,
@@ -37,6 +39,7 @@ export const ProductFrom = ({
         if (images.length > 0) {
             data['images'] = images;
         }
+
         if (_id) {
             //update product
             await axios.put('/api/products', { ...data, _id });
@@ -52,13 +55,14 @@ export const ProductFrom = ({
     }
     const onUpLoadImage = async (ev: any) => {
         setLoading(true);
-
+        setUploadPage(true);
         const files = ev.target?.files;
         if (files.length > 0) {
             const data = new FormData();
             for (const file of files) {
                 data.append('file', file);
             }
+
             const res = await axios.post('/api/upload', data);
             setImages((prevImage: string[]) => {
                 return [...prevImage, ...res.data.links];
@@ -72,8 +76,8 @@ export const ProductFrom = ({
                 {_id ? 'Edit product' : 'Add new product'}
             </h1>
             <form onSubmit={handleSubmit(addProductSubmitHanler)} className="ml-10">
-                {(!!images.length || _id) && <Card images={images} _id={_id} />}
-
+                {_id && <Card images={existingImages} _id={_id} />}
+                {!!images.length && <Card images={images} _id={_id} upLoadPage={uploadPage} />}
                 <Input
                     exitingValue={existingName}
                     require={existingName ? false : true}
@@ -104,25 +108,22 @@ export const ProductFrom = ({
                     label="Description"
                     name="description"
                 />
-                {!_id ? (
-                    ''
-                ) : (
-                    <div className="">
-                        <p>Upload photos</p>
-                        <label className="inline-block">
-                            <input type="file" className="hidden" onChange={onUpLoadImage} />
-                            <p className="w-24 h-24 bg-slate-400/70 rounded-md flex items-center justify-center text-sm font-medium cursor-pointer gap-1 mb-4">
-                                {loading ? (
-                                    <CricleLoader size={40} loading={loading} color={'#2463eb'} />
-                                ) : (
-                                    <span>
-                                        <ArrowUpOnSquareIcon width={16} /> Upload
-                                    </span>
-                                )}
-                            </p>
-                        </label>
-                    </div>
-                )}
+
+                <div className="">
+                    <p>Upload photos</p>
+                    <label className="inline-block">
+                        <input type="file" className="hidden" onChange={onUpLoadImage} />
+                        <p className="w-24 h-24 bg-slate-400/70 rounded-md flex items-center justify-center text-sm font-medium cursor-pointer gap-1 mb-4">
+                            {loading ? (
+                                <CricleLoader size={40} loading={loading} color={'#2463eb'} />
+                            ) : (
+                                <span className="flex">
+                                    <ArrowUpOnSquareIcon width={16} /> Upload
+                                </span>
+                            )}
+                        </p>
+                    </label>
+                </div>
 
                 <Button type="submit" children={_id ? 'Edit product' : 'Add new product'} />
             </form>

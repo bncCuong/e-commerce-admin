@@ -5,6 +5,8 @@ type ProductType = {
     _id?: string | undefined;
     __v?: number | undefined;
     images?: string[];
+    upLoadPage?: boolean;
+    existingImages?: string[];
 };
 
 type CategoryType = {

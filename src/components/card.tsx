@@ -9,8 +9,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
-export const Card = ({ name, price, description, _id, images }: ProductType) => {
-    console.log(images);
+export const Card = ({ name, price, description, _id, images, upLoadPage, existingImages }: ProductType) => {
     return (
         <div className="relative object-cover cursor-pointer w-[300px] h-[400px]  border-2 rounded-lg p-2 bg-slate-300/30 shadow-lg inline-flex  flex-col justify-between my-4">
             <div className="absolute top-10 -left-1 flex z-40">
@@ -36,11 +35,23 @@ export const Card = ({ name, price, description, _id, images }: ProductType) => 
                     loop={true}
                     pagination={{ clickable: true }}
                 >
-                    {images?.map((image) => (
-                        <SwiperSlide key={image}>
-                            <Image src={image as string} alt="priduct photo" width={500} height={500} />
-                        </SwiperSlide>
-                    ))}
+                    {existingImages ? (
+                        <>
+                            {existingImages?.map((image) => (
+                                <SwiperSlide key={image}>
+                                    <Image src={image as string} alt="priduct photo" width={500} height={500} />
+                                </SwiperSlide>
+                            ))}
+                        </>
+                    ) : (
+                        <>
+                            {images?.map((image) => (
+                                <SwiperSlide key={image}>
+                                    <Image src={image as string} alt="priduct photo" width={500} height={500} />
+                                </SwiperSlide>
+                            ))}
+                        </>
+                    )}
                 </Swiper>
             </div>
             <div className=" absolute -top-0.5 -left-2 h-8 w-24 rounded-tl-lg bg-red-600 px-2 py-1 flex items-center justify-center rounded-r-2xl ">
@@ -53,12 +64,14 @@ export const Card = ({ name, price, description, _id, images }: ProductType) => 
                 <div>price: {price}</div>
                 <div>infomation: {description}</div>
 
-                <div className="flex gap-4 ">
-                    <Link href={'/products/edit/' + _id} className="inline-flex">
-                        <Button type="button">Edit</Button>
-                    </Link>
-                    <Button type="button">Delete</Button>
-                </div>
+                {!upLoadPage && (
+                    <div className={`flex gap-4 `}>
+                        <Link href={' /products/edit/' + _id} className="inline-flex">
+                            <Button type="button">Edit</Button>
+                        </Link>
+                        <Button type="button">Delete</Button>
+                    </div>
+                )}
             </div>
         </div>
     );

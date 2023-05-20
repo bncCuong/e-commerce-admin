@@ -17,12 +17,11 @@ const EditPage = (props: Props) => {
             setProduct(res.data);
         });
     }, [id]);
-    console.log(product);
 
     return (
         <>
             <ProductFrom
-                images={product.images}
+                existingImages={product.images}
                 name={product.name}
                 price={product.price}
                 description={product.description}
