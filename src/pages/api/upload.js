@@ -1,5 +1,3 @@
-
-
 import multiparty from 'multiparty';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 
@@ -13,9 +11,9 @@ const bucketName = 'bnc-ecommerce-web';
 
 export default async function uploadImage(req, res) {
     // await mongooseConnect();
-//   await isAdminRequest(req,res);
+    //   await isAdminRequest(req,res);
     const form = new multiparty.Form();
-    const { fields , files } = await new Promise((resolve, reject) => {
+    const { fields, files } = await new Promise((resolve, reject) => {
         form.parse(req, (err, fields, files) => {
             if (err) reject(err);
             resolve({ fields, files });
@@ -25,8 +23,8 @@ export default async function uploadImage(req, res) {
     const client = new S3Client({
         region: 'ap-southeast-1',
         credentials: {
-            accessKeyId: process.env.S3_ACCSES_KEY ,
-            secretAccessKey: process.env.S3_SECRET_ACCESS_KEY ,
+            accessKeyId: process.env.S3_ACCSES_KEY,
+            secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
         },
     });
     const links = [];
@@ -42,9 +40,10 @@ export default async function uploadImage(req, res) {
                 Key: newFileName,
                 Body: fs.readFileSync(file.path),
                 ACL: 'public-read',
-                ContentType: mime.lookup(file.path) 
+                ContentType: mime.lookup(file.path),
             }),
         );
+
         const link = `https://${bucketName}.s3.amazonaws.com/${newFileName}`;
         links.push(link);
     }

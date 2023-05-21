@@ -1,6 +1,6 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { Layout } from '@/components';
-import { Button } from '@/utils';
+import { Button, Input } from '@/utils';
 import axios from 'axios';
 
 type Props = {};
@@ -10,6 +10,7 @@ const Products = (props: Props) => {
     const [listCategorie, setListCategorie] = useState<CategoryType[]>([]);
     const [parent, setParent] = useState<string>('');
     const [editedCategory, setEditedCategory] = useState<CategoryType | null>(null);
+    const [properties, setProperties] = useState<any>([]);
     useEffect(() => {
         fetchCategories();
     }, []);
@@ -19,7 +20,11 @@ const Products = (props: Props) => {
     };
 
     const addCategoriesSubmitHanler = async (e: FormEvent<HTMLFormElement>) => {
-        const data = { parent, categorie };
+        const data = {
+            parent,
+            categorie,
+            properties: properties.map((item: PropertyType) => ({ key: item.key, values: item.values.split(',') })),
+        };
         e.preventDefault();
         if (categorie === '') return;
         if (editedCategory) {
@@ -29,6 +34,8 @@ const Products = (props: Props) => {
             await axios.post('api/categories', data);
         }
         setCategorie('');
+        setProperties([]);
+        setParent('');
         fetchCategories();
     };
 
@@ -36,12 +43,46 @@ const Products = (props: Props) => {
         setEditedCategory(categorie);
         setParent(categorie.parent?._id as string);
         setCategorie(categorie.categorie);
+        setProperties(
+            categorie.properties?.map(({ key, values }: any) => ({
+                key,
+                values: values.join(','),
+            })),
+        );
     };
 
     const deleteCategory = async (id: string) => {
         await axios.delete('/api/categories?id=' + id);
         fetchCategories();
     };
+
+    const addProperties = () => {
+        setProperties((prev: [Object]) => {
+            return [...prev, { key: '', values: '' }];
+        });
+    };
+
+    const propertiesKeyHanler = (index: number, newKey: string) => {
+        setProperties((prev: any) => {
+            const propertie = [...prev];
+            propertie[index].key = newKey;
+            return propertie;
+        });
+    };
+    const propertiesValueHanler = (index: number, newValue: string) => {
+        setProperties((prev: any) => {
+            const propertie = [...prev];
+            propertie[index].values = newValue;
+            return propertie;
+        });
+    };
+
+    const removeProperty = (indexRemove: number) => {
+        setProperties((prev: number[]) => {
+            return [...prev].filter((p, pIndex) => pIndex !== indexRemove);
+        });
+    };
+
     return (
         <Layout>
             <h1 className="font-bold text-4xl bg-gradient-to-br from-blue-600 via-purple-600 to-pink-700 bg-clip-text text-transparent ">
@@ -68,8 +109,35 @@ const Products = (props: Props) => {
                                 </option>
                             ))}
                     </select>
-                    <Button type="submit" children="Save" />
                 </div>
+
+                <div className="mt-10 flex flex-col  space-x-2 ">
+                    <div className="ml-2 mb-3">
+                        <Button type="button" children="Add new properties" onClick={addProperties} />
+                    </div>
+
+                    {properties.length > 0 &&
+                        properties.map((item: any, index: number) => (
+                            <div key={item.index} className="flex space-x-2 mb-2 items-center ">
+                                <input
+                                    className="input w-[200px]"
+                                    type="text"
+                                    placeholder="Key"
+                                    value={item.key}
+                                    onChange={(e) => propertiesKeyHanler(index, e.target.value)}
+                                />
+                                <input
+                                    className="input w-[200px]"
+                                    type="text"
+                                    placeholder="Value"
+                                    value={item.values}
+                                    onChange={(e) => propertiesValueHanler(index, e.target.value)}
+                                />
+                                <Button type="button" children="Remove" onClick={() => removeProperty(index)} />
+                            </div>
+                        ))}
+                </div>
+                <Button type="submit" children="Save" />
             </form>
             {listCategorie.length > 0 &&
                 listCategorie.map((item) => (

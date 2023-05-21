@@ -15,4 +15,10 @@ type CategoryType = {
     categorie: string;
     _id: string;
     parent?: { categorie: string; _id: string };
+    properties?: Object[];
+};
+
+type PropertyType = {
+    key: string;
+    values: string;
 };

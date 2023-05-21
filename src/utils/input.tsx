@@ -21,9 +21,7 @@ export const Input = ({ placeholder, label, type, isError, require, registee, na
                 {...registee(name, { required: require, minLength: 2 })}
                 type={type}
                 aria-describedby="helper-text-explanation"
-                className={`${
-                    isError ? 'border-red-600' : ''
-                } bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500  w-[300px] p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
+                className={`${isError ? 'border-red-600' : ''} input`}
                 placeholder={placeholder}
             />
             {isError && <p className="absolute text-xs mt-0 text-red-600">Please enter a {placeholder} </p>}

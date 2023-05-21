@@ -9,8 +9,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     await mongooseConnect();
 
     if (method === 'POST') {
-        const { categorie, parent } = req.body;
-        const categoryDoc = await Category.create({ categorie, parent: parent || undefined });
+        const { categorie, parent, properties } = req.body;
+        const categoryDoc = await Category.create({ categorie, parent: parent || undefined, properties });
         res.json(categoryDoc);
     }
 
@@ -23,8 +23,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     if (method === 'PUT') {
-        const { categorie, parent, _id } = req.body;
-        const categoryDoc = await Category.updateOne({ _id }, { categorie, parent: parent || undefined });
+        const { categorie, parent, _id, properties } = req.body;
+        const categoryDoc = await Category.updateOne({ _id }, { categorie, parent: parent || undefined, properties });
         res.json(categoryDoc);
     }
 
