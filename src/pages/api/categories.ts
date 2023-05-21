@@ -10,7 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     if (method === 'POST') {
         const { categorie, parent } = req.body;
-        const categoryDoc = await Category.create({ categorie, parent });
+        const categoryDoc = await Category.create({ categorie, parent: parent || undefined });
         res.json(categoryDoc);
     }
 
@@ -19,6 +19,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             res.json(await Category.findOne({ _id: req.query._id }));
         } else {
             res.json(await Category.find().populate('parent'));
+        }
+    }
+
+    if (method === 'PUT') {
+        const { categorie, parent, _id } = req.body;
+        const categoryDoc = await Category.updateOne({ _id }, { categorie, parent: parent || undefined });
+        res.json(categoryDoc);
+    }
+
+    if (method === 'DELETE') {
+        if (req.query.id) {
+            await Category.deleteOne({ _id: req.query.id });
+            res.json('ok');
         }
     }
 }

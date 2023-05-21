@@ -7,12 +7,13 @@ export default async function createProduct(req: NextApiRequest, res: NextApiRes
     const { method } = req;
     await mongooseConnect();
     if (method === 'POST') {
-        const { name, price, description, images } = req.body;
+        const { name, price, description, images, categorie } = req.body;
         const productDoc = await Product.create({
             name,
             price,
             description,
             images,
+            categorie,
         });
         res.json(productDoc);
     }
@@ -25,8 +26,8 @@ export default async function createProduct(req: NextApiRequest, res: NextApiRes
     }
 
     if (method === 'PUT') {
-        const { name, price, description, _id, images } = req.body;
-        await Product.updateOne({ _id }, { name, price, description, images });
+        const { name, price, description, _id, images, categorie } = req.body;
+        await Product.updateOne({ _id }, { name, price, description, images, categorie });
         res.json(true);
     }
 

@@ -21,6 +21,7 @@ const EditPage = (props: Props) => {
     return (
         <>
             <ProductFrom
+                categorie={product.categorie}
                 existingImages={product.images}
                 name={product.name}
                 price={product.price}

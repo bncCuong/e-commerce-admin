@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Card, Layout } from '@/components';
@@ -14,6 +14,8 @@ type FormValue = {
     _id?: string;
     images?: string[];
     existingImages?: string[];
+    categorie?: string;
+    parent?: string;
 };
 
 export const ProductFrom = ({
@@ -22,12 +24,16 @@ export const ProductFrom = ({
     price: existingPrice,
     _id,
     existingImages,
-}: FormValue | ProductType) => {
+    categorie: existingCategorie,
+    parent,
+}: FormValue) => {
     const router = useRouter();
     const [backToProduct, setBackToProduct] = useState<boolean>(false);
     const [images, setImages] = useState<string[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [uploadPage, setUploadPage] = useState<boolean>(false);
+    const [categories, setCategories] = useState<CategoryType[]>([]);
+    const [categorieOption, setCategorieOption] = useState<string>(existingCategorie || '');
     const {
         register,
         handleSubmit,
@@ -35,9 +41,17 @@ export const ProductFrom = ({
         formState: { errors },
     } = useForm<FormValue>();
 
+    //get list category
+    useEffect(() => {
+        axios.get('/api/categories').then((result) => setCategories(result.data));
+    }, []);
+
     const addProductSubmitHanler: SubmitHandler<FormValue> = async (data) => {
         if (images.length > 0) {
             data['images'] = images;
+        }
+        if (categorieOption) {
+            data['categorie'] = categorieOption;
         }
 
         if (_id) {
@@ -62,7 +76,6 @@ export const ProductFrom = ({
             for (const file of files) {
                 data.append('file', file);
             }
-
             const res = await axios.post('/api/upload', data);
             setImages((prevImage: string[]) => {
                 return [...prevImage, ...res.data.links];
@@ -70,6 +83,7 @@ export const ProductFrom = ({
         }
         setLoading(false);
     };
+
     return (
         <Layout>
             <h1 className="font-bold text-4xl bg-gradient-to-br from-blue-600 via-purple-600 to-pink-700 bg-clip-text text-transparent mb-10 ">
@@ -88,6 +102,17 @@ export const ProductFrom = ({
                     label="Name product"
                     name="name"
                 />
+                <div className="flex flex-col space-y-2">
+                    <label>Category</label>
+                    <select value={categorieOption} onChange={(ev) => setCategorieOption(ev.target.value)}>
+                        {categories.length > 0 &&
+                            categories.map((item) => (
+                                <option className="w-[300px] py-1" key={item._id} value={item._id}>
+                                    {item.categorie}
+                                </option>
+                            ))}
+                    </select>
+                </div>
                 <Input
                     exitingValue={existingPrice}
                     require={existingPrice ? false : true}

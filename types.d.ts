@@ -7,10 +7,12 @@ type ProductType = {
     images?: string[];
     upLoadPage?: boolean;
     existingImages?: string[];
+    categorie?: string;
+    fetchProduct?: () => void;
 };
 
 type CategoryType = {
     categorie: string;
     _id: string;
-    parent: { categorie: string; _id: string };
+    parent?: { categorie: string; _id: string };
 };

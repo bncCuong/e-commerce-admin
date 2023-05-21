@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, EffectCreative, Keyboard } from 'swiper';
 
@@ -8,8 +8,22 @@ import Link from 'next/link';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
+import axios from 'axios';
 
-export const Card = ({ name, price, description, _id, images, upLoadPage, existingImages }: ProductType) => {
+export const Card = ({
+    name,
+    price,
+    description,
+    _id,
+    images,
+    upLoadPage,
+    existingImages,
+    fetchProduct,
+}: ProductType) => {
+    const deleteProduct = async () => {
+        await axios.delete('/api/products?id=' + _id);
+        if (fetchProduct) fetchProduct();
+    };
     return (
         <div className="relative object-cover cursor-pointer w-[300px] h-[400px]  border-2 rounded-lg p-2 bg-slate-300/30 shadow-lg inline-flex  flex-col justify-between my-4">
             <div className="absolute top-10 -left-1 flex z-40">
@@ -56,7 +70,7 @@ export const Card = ({ name, price, description, _id, images, upLoadPage, existi
             </div>
             <div className=" absolute -top-0.5 -left-2 h-8 w-24 rounded-tl-lg bg-red-600 px-2 py-1 flex items-center justify-center rounded-r-2xl ">
                 <p className="absolute w-1.5 h-1.5 bg-red-700 -left-0 top-8 rounded-b" />
-                <p className="text-white font-semibold text-sm">Self off 10%</p>
+                <p className="text-white font-semibold text-xs">Sell off 10%</p>
             </div>
 
             <div className="absolute bottom-2 right-2">
@@ -69,7 +83,10 @@ export const Card = ({ name, price, description, _id, images, upLoadPage, existi
                         <Link href={' /products/edit/' + _id} className="inline-flex">
                             <Button type="button">Edit</Button>
                         </Link>
-                        <Button type="button">Delete</Button>
+
+                        <Button onClick={deleteProduct} type="button">
+                            Delete
+                        </Button>
                     </div>
                 )}
             </div>

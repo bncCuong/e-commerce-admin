@@ -3,11 +3,13 @@ import React, { ButtonHTMLAttributes } from 'react';
 type Props = {
     type: 'submit' | 'reset' | 'button' | undefined;
     children: React.ReactNode;
+    onClick?: () => void;
 };
 
-export const Button = ({ type, children }: Props) => {
+export const Button = ({ type, children, onClick }: Props) => {
     return (
         <button
+            onClick={onClick}
             type={type}
             className={` relative min-w-[86px] inline-flex items-center justify-center px-5 py-1.5 overflow-hidden font-medium text-indigo-600 transition duration-300 ease-out rounded-full shadow-xl group hover:ring-1 hover:ring-purple-500`}
         >
