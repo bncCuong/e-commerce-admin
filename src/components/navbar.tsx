@@ -5,16 +5,21 @@ import {
     HomeIcon,
     ListBulletIcon,
     QueueListIcon,
+    ArrowLeftOnRectangleIcon,
 } from '@heroicons/react/24/outline';
+import { signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-type Props = {};
-
-export const Navbar = (props: Props) => {
+export const Navbar = () => {
     const router = useRouter();
     const notActive = 'flex gap-2 mb-4';
     const isActive = notActive + ' bg-white text-blue-700 p-1 rounded-l-lg ';
+
+    const signOutHanler = async () => {
+        await router.push('/');
+        await signOut();
+    };
     return (
         <aside className=" p-4 pr-0">
             <Link href="/" className="flex mb-4 gap-2 mr-4">
@@ -37,6 +42,9 @@ export const Navbar = (props: Props) => {
                 <Link className={`${router.pathname === '/settings' ? isActive : notActive}`} href="/settings">
                     <Cog8ToothIcon width={24} /> Settings
                 </Link>
+                <button className={`${router.pathname === '/settings' ? isActive : notActive}`} onClick={signOutHanler}>
+                    <ArrowLeftOnRectangleIcon width={24} /> Logout
+                </button>
             </nav>
         </aside>
     );

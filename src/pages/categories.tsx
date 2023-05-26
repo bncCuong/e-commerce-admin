@@ -83,6 +83,13 @@ const Products = (props: Props) => {
         });
     };
 
+    const cancelBtnHanler = () => {
+        setEditedCategory(null);
+        setParent('');
+        setProperties('');
+        setCategorie('');
+    };
+
     return (
         <Layout>
             <h1 className="font-bold text-4xl bg-gradient-to-br from-blue-600 via-purple-600 to-pink-700 bg-clip-text text-transparent ">
@@ -102,6 +109,7 @@ const Products = (props: Props) => {
                         onChange={(e) => setCategorie(e.target.value)}
                     />
                     <select value={parent} onChange={(e) => setParent(e.target.value)}>
+                        <option value="">No category</option>
                         {listCategorie &&
                             listCategorie.map((item) => (
                                 <option key={item._id} value={item._id}>
@@ -138,10 +146,11 @@ const Products = (props: Props) => {
                         ))}
                 </div>
                 <Button type="submit" children="Save" />
+                {editedCategory && <Button type="button" children="Cancel" onClick={cancelBtnHanler} />}
             </form>
             {listCategorie.length > 0 &&
                 listCategorie.map((item) => (
-                    <div>
+                    <div key={item._id}>
                         {<span>{item?.categorie}</span>}
                         <span className="mx-4">{item.parent && item.parent?.categorie}</span>
                         <Button onClick={() => editCategory(item)} type="button">

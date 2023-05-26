@@ -7,8 +7,12 @@ type ProductType = {
     images?: string[];
     upLoadPage?: boolean;
     existingImages?: string[];
+    existingName?: string;
+    existingPrice?: number;
+    existingDescription?: string;
     categorie?: string;
     fetchProduct?: () => void;
+    product_properties?: Object;
 };
 
 type CategoryType = {

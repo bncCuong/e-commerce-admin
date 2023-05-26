@@ -2,18 +2,25 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Product } from '../../../models/Product';
 import { mongooseConnect } from '../../../lib/mongoose';
+import { checkAdmin } from './auth/[...nextauth]';
 
 export default async function createProduct(req: NextApiRequest, res: NextApiResponse) {
     const { method } = req;
+
+    //Conect to database()
     await mongooseConnect();
+
+    await checkAdmin(req, res);
+
     if (method === 'POST') {
-        const { name, price, description, images, categorie } = req.body;
+        const { name, price, description, images, categorie, product_properties } = req.body;
         const productDoc = await Product.create({
             name,
             price,
             description,
             images,
             categorie,
+            product_properties,
         });
         res.json(productDoc);
     }
@@ -26,8 +33,8 @@ export default async function createProduct(req: NextApiRequest, res: NextApiRes
     }
 
     if (method === 'PUT') {
-        const { name, price, description, _id, images, categorie } = req.body;
-        await Product.updateOne({ _id }, { name, price, description, images, categorie });
+        const { name, price, description, _id, images, categorie, product_properties } = req.body;
+        await Product.updateOne({ _id }, { name, price, description, images, categorie, product_properties });
         res.json(true);
     }
 

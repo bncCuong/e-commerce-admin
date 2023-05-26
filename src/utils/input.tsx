@@ -1,5 +1,4 @@
-import { ChangeEventHandler } from 'react';
-import { FieldErrors } from 'react-hook-form';
+import { useState } from 'react';
 
 type Props = {
     placeholder: string;
@@ -10,6 +9,7 @@ type Props = {
     registee: any;
     name?: string;
     exitingValue?: string | number;
+    onChange?: () => void;
 };
 
 export const Input = ({ placeholder, label, type, isError, require, registee, name, exitingValue }: Props) => {
@@ -20,7 +20,6 @@ export const Input = ({ placeholder, label, type, isError, require, registee, na
                 defaultValue={exitingValue}
                 {...registee(name, { required: require, minLength: 2 })}
                 type={type}
-                aria-describedby="helper-text-explanation"
                 className={`${isError ? 'border-red-600' : ''} input`}
                 placeholder={placeholder}
             />

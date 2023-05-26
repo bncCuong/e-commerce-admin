@@ -27,6 +27,7 @@ const EditPage = (props: Props) => {
                 price={product.price}
                 description={product.description}
                 _id={id as string}
+                product_properties={product.product_properties}
             />
         </>
     );

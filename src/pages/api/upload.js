@@ -10,8 +10,7 @@ import { mongooseConnect } from '../../../lib/mongoose';
 const bucketName = 'bnc-ecommerce-web';
 
 export default async function uploadImage(req, res) {
-    // await mongooseConnect();
-    //   await isAdminRequest(req,res);
+    await mongooseConnect();
     const form = new multiparty.Form();
     const { fields, files } = await new Promise((resolve, reject) => {
         form.parse(req, (err, fields, files) => {

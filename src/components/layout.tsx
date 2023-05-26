@@ -1,8 +1,9 @@
-import { useSession, signIn, signOut } from 'next-auth/react';
+import { useSession, signIn } from 'next-auth/react';
+import { ReactNode } from 'react';
 import { Navbar } from './navbar';
 
 type Props = {
-    children: any;
+    children: ReactNode;
 };
 
 export const Layout = ({ children }: Props) => {
@@ -22,16 +23,7 @@ export const Layout = ({ children }: Props) => {
     return (
         <div className="w-full min-h-screen bg-blue-600 flex">
             <Navbar />
-            <div className="flex-grow bg-white text-black m-2 rounded-lg mx-0 p-4">
-                {children}
-
-                {/* <button
-                    className="bg-gray-300 px-8 font-bold rounded-lg py-2 hover:bg-white/90 "
-                    onClick={() => signOut()}
-                >
-                    Logout
-                </button> */}
-            </div>
+            <div className="flex-grow bg-white text-black m-2 rounded-lg mx-0 p-4">{children}</div>
         </div>
     );
 };

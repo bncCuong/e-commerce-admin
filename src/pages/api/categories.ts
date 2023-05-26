@@ -3,10 +3,12 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { Category } from '../../../models/Categories';
 import axios from 'axios';
 import { mongooseConnect } from '../../../lib/mongoose';
+import { checkAdmin } from './auth/[...nextauth]';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { method } = req;
     await mongooseConnect();
+    await checkAdmin(req, res);
 
     if (method === 'POST') {
         const { categorie, parent, properties } = req.body;

@@ -4,18 +4,22 @@ import Link from 'next/link';
 import { Card, Layout } from '@/components';
 import { Button } from '@/utils';
 
-type Props = {};
-
-const Products = (props: Props) => {
+const Products = () => {
     const [products, setProducts] = useState<ProductType[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
+    
     const fetchProducts = () => {
+        setLoading(true);
         axios.get('api/products').then((res) => {
             setProducts(res.data);
         });
+        setLoading(false);
     };
     useEffect(() => {
         fetchProducts();
     }, []);
+
+    console.log(loading);
     return (
         <Layout>
             <Link href="/products/newproduct">
