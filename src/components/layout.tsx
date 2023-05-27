@@ -23,7 +23,7 @@ export const Layout = ({ children }: Props) => {
     return (
         <div className="w-full min-h-screen bg-blue-600 flex">
             <Navbar />
-            <div className="flex-grow bg-white text-black m-2 rounded-lg mx-0 p-4">{children}</div>
+            <div className="flex-grow bg-[#f5f5f7] text-black m-2 rounded-lg mx-0 p-4">{children}</div>
         </div>
     );
 };

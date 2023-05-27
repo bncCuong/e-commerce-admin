@@ -42,7 +42,7 @@ export const Navbar = () => {
                 <Link className={`${router.pathname === '/settings' ? isActive : notActive}`} href="/settings">
                     <Cog8ToothIcon width={24} /> Settings
                 </Link>
-                <button className={`${router.pathname === '/settings' ? isActive : notActive}`} onClick={signOutHanler}>
+                <button className={ notActive } onClick={signOutHanler}>
                     <ArrowLeftOnRectangleIcon width={24} /> Logout
                 </button>
             </nav>
