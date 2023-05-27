@@ -15,7 +15,7 @@ type Props = {
 export const Input = ({ placeholder, label, type, isError, require, registee, name, exitingValue }: Props) => {
     return (
         <div className="mb-6 relative">
-            <label className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">{label}</label>
+            <label className="block mb-1 text-sm font-medium text-gray-900 ">{label}</label>
             <input
                 defaultValue={exitingValue}
                 {...registee(name, { required: require, minLength: 2 })}

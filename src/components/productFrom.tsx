@@ -95,6 +95,7 @@ export const ProductFrom = ({
         setLoading(false);
     };
 
+    //lấy ra list properties khi chọn thẻ option
     const productPropertiesFill = [];
     if (categorieOption && categories.length > 0) {
         const propertiesInfo = categories.find((item) => item._id === categorieOption);
@@ -117,7 +118,7 @@ export const ProductFrom = ({
             <h1 className="font-bold text-4xl bg-gradient-to-br from-blue-600 via-purple-600 to-pink-700 bg-clip-text text-transparent mb-10 ">
                 {_id ? 'Edit product' : 'Add new product'}
             </h1>
-            <form onSubmit={handleSubmit(addProductSubmitHanler)} className="ml-10 space-x-10 lg:flex ml-[15%] ">
+            <form onSubmit={handleSubmit(addProductSubmitHanler)} className=" space-x-10 lg:flex ml-[15%] ">
                 <div>
                     {_id && (
                         <Card
@@ -128,7 +129,8 @@ export const ProductFrom = ({
                             existingDescription={existingDescription}
                         />
                     )}
-                    {!!images.length && <Card images={images} _id={_id} upLoadPage={uploadPage} />}
+                    {/* {!!images.length && <Card images={images} _id={_id} upLoadPage={uploadPage} />} */}
+                    <Card images={images} _id={_id} upLoadPage={uploadPage} />
                 </div>
                 <div>
                     <Input
@@ -143,7 +145,7 @@ export const ProductFrom = ({
                     />
                     <div className="flex flex-col space-y-2 w-[300px] mb-4">
                         <div className="flex space-x-2">
-                            <label className="font-semibold">Category:</label>
+                            <label className="">Category</label>
                             <select
                                 className="flex-1 input"
                                 value={categorieOption}

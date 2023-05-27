@@ -1,6 +1,8 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { Layout } from '@/components';
 import { Button } from '@/utils';
+import CricleLoader from 'react-spinners/CircleLoader';
+
 import axios from 'axios';
 
 type Props = {};
@@ -13,30 +15,38 @@ const Products = (props: Props) => {
     const [parent, setParent] = useState<string>('');
     const [editedCategory, setEditedCategory] = useState<CategoryType | null>(null);
     const [properties, setProperties] = useState<any>([]);
+    const [loading, setLoading] = useState<boolean>(false);
     useEffect(() => {
         fetchCategories();
     }, []);
 
     const fetchCategories = () => {
         axios.get('api/categories').then((res) => setListCategorie(res.data));
+        setLoading(false);
     };
 
-    const checkCategory = listCategorie.forEach((item) => {
-        // return item.categorie.includes(categorie);
-        console.log(item.categorie);
-    });
     const addCategoriesSubmitHanler = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const data = {
             parent,
             categorie,
-            properties: properties.map((item: PropertyType) => ({ key: item.key, values: item.values.split(',') })),
+            properties:
+                properties &&
+                properties.map((item: PropertyType) => ({ key: item.key, values: item.values.split(',') })),
         };
+        if (data.categorie === '') return;
 
-        if (categorie === '') return;
-        // if(listCategorie.includes(categorie)) {
+        //check nếu có category trong list categories rồi thì k add thêm
+        const hasCategory = listCategorie.some(
+            (item) =>
+                item.categorie.toLowerCase().trim().replace(/\s+/g, ' ') ===
+                data.categorie.toLowerCase().trim().replace(/\s+/g, ' '),
+        );
 
-        // }
+        if (hasCategory === true) {
+            return;
+        }
+
         if (editedCategory) {
             await axios.put('/api/categories', { ...data, _id: editedCategory._id });
             setEditedCategory(null);
@@ -62,6 +72,7 @@ const Products = (props: Props) => {
     };
 
     const deleteCategory = async (id: string) => {
+        setLoading(true);
         await axios.delete('/api/categories?id=' + id);
         fetchCategories();
     };
@@ -157,6 +168,7 @@ const Products = (props: Props) => {
                 </div>
                 <div className=" space-x-2 ml-2 my-2">
                     <Button type="submit" children="Save" />
+
                     {editedCategory && <Button type="button" children="Cancel" onClick={cancelBtnHanler} />}
                 </div>
             </form>
@@ -169,7 +181,11 @@ const Products = (props: Props) => {
                             Edit
                         </Button>
                         <Button onClick={() => deleteCategory(item._id)} type="button">
-                            Delete
+                            {loading && item._id ? (
+                                <CricleLoader size={20} loading={loading} color={'#2463eb'} />
+                            ) : (
+                                'Delete'
+                            )}
                         </Button>
                     </div>
                 ))}
