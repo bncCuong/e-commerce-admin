@@ -20,8 +20,9 @@ export const Navbar = () => {
         await router.push('/');
         await signOut();
     };
+
     return (
-        <aside className=" p-4 pr-0">
+        <aside className=" p-4 pr-0 min-w-[220px] bg-blue-600 ">
             <Link href="/" className="flex mb-4 gap-2 mr-4">
                 <BuildingLibraryIcon width={24} /> <span>E-commerce Admin</span>
             </Link>
@@ -42,7 +43,7 @@ export const Navbar = () => {
                 <Link className={`${router.pathname === '/settings' ? isActive : notActive}`} href="/settings">
                     <Cog8ToothIcon width={24} /> Settings
                 </Link>
-                <button className={ notActive } onClick={signOutHanler}>
+                <button className={notActive} onClick={signOutHanler}>
                     <ArrowLeftOnRectangleIcon width={24} /> Logout
                 </button>
             </nav>

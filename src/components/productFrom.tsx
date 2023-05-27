@@ -109,8 +109,6 @@ export const ProductFrom = ({
         });
     };
 
-    
-
     const cancelBtnHanler = () => {
         router.push('/products');
     };
@@ -119,100 +117,104 @@ export const ProductFrom = ({
             <h1 className="font-bold text-4xl bg-gradient-to-br from-blue-600 via-purple-600 to-pink-700 bg-clip-text text-transparent mb-10 ">
                 {_id ? 'Edit product' : 'Add new product'}
             </h1>
-            <form onSubmit={handleSubmit(addProductSubmitHanler)} className="ml-10">
-                {_id && (
-                    <Card
-                        images={existingImages}
-                        _id={_id}
-                        existingName={existingName}
-                        existingPrice={existingPrice}
-                        existingDescription={existingDescription}
+            <form onSubmit={handleSubmit(addProductSubmitHanler)} className="ml-10 space-x-10 lg:flex ml-[15%] ">
+                <div>
+                    {_id && (
+                        <Card
+                            images={existingImages}
+                            _id={_id}
+                            existingName={existingName}
+                            existingPrice={existingPrice}
+                            existingDescription={existingDescription}
+                        />
+                    )}
+                    {!!images.length && <Card images={images} _id={_id} upLoadPage={uploadPage} />}
+                </div>
+                <div>
+                    <Input
+                        exitingValue={existingName}
+                        require={existingName ? false : true}
+                        isError={errors.name}
+                        registee={register}
+                        type="text"
+                        placeholder="Product name"
+                        label="Name product"
+                        name="name"
                     />
-                )}
-                {!!images.length && <Card images={images} _id={_id} upLoadPage={uploadPage} />}
-                <Input
-                    exitingValue={existingName}
-                    require={existingName ? false : true}
-                    isError={errors.name}
-                    registee={register}
-                    type="text"
-                    placeholder="Product name"
-                    label="Name product"
-                    name="name"
-                />
-                <div className="flex flex-col space-y-2 w-[300px] mb-4">
-                    <div className="flex space-x-2">
-                        <label>Category:</label>
-                        <select
-                            className="flex-1"
-                            value={categorieOption}
-                            onChange={(ev) => setCategorieOption(ev.target.value)}
-                        >
-                            {categories.length > 0 &&
-                                categories.map((item) => (
-                                    <option className="w-[300px] py-1" key={item._id} value={item._id}>
-                                        {item.categorie}
-                                    </option>
-                                ))}
-                        </select>
-                    </div>
-                    {productPropertiesFill.map((item: any, index: number) => (
-                        <div className="flex ml-20" key={index}>
-                            <p>{item.key} :</p>
+                    <div className="flex flex-col space-y-2 w-[300px] mb-4">
+                        <div className="flex space-x-2">
+                            <label className="font-semibold">Category:</label>
                             <select
-                                value={productProperties[item.key]}
-                                className="flex-1"
-                                onChange={(ev) => changePropertiesHanler(item.key, ev.target.value)}
+                                className="flex-1 input"
+                                value={categorieOption}
+                                onChange={(ev) => setCategorieOption(ev.target.value)}
                             >
-                                {item.values.map((value: string) => (
-                                    <option className="text-center" key={value}>
-                                        {value}
-                                    </option>
-                                ))}
+                                <option value="">No category</option>
+                                {categories.length > 0 &&
+                                    categories.map((item) => (
+                                        <option className="w-[300px] py-1" key={item._id} value={item._id}>
+                                            {item.categorie}
+                                        </option>
+                                    ))}
                             </select>
                         </div>
-                    ))}
+                        {productPropertiesFill.map((item: any, index: number) => (
+                            <div className="flex ml-20" key={index}>
+                                <p>{item.key} :</p>
+                                <select
+                                    value={productProperties[item.key]}
+                                    className="flex-1 input ml-2"
+                                    onChange={(ev) => changePropertiesHanler(item.key, ev.target.value)}
+                                >
+                                    {item.values.map((value: string) => (
+                                        <option className="text-center" key={value}>
+                                            {value}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                        ))}
+                    </div>
+                    <Input
+                        exitingValue={existingPrice}
+                        require={existingPrice ? false : true}
+                        registee={register}
+                        isError={errors.price}
+                        type="number"
+                        placeholder="Product price"
+                        label="Price"
+                        name="price"
+                    />
+                    <Input
+                        exitingValue={existingDescription}
+                        require={false}
+                        isError={errors.description}
+                        registee={register}
+                        type="text"
+                        placeholder="Description"
+                        label="Description"
+                        name="description"
+                    />
+                    <div className="">
+                        <p>Upload photos</p>
+                        <label className="inline-block">
+                            <input type="file" className="hidden" onChange={onUpLoadImage} />
+                            <p className="w-24 h-24 bg-slate-400/70 rounded-md flex items-center justify-center text-sm font-medium cursor-pointer gap-1 mb-4">
+                                {loading ? (
+                                    <CricleLoader size={40} loading={loading} color={'#2463eb'} />
+                                ) : (
+                                    <span className="flex">
+                                        <ArrowUpOnSquareIcon width={16} /> Upload
+                                    </span>
+                                )}
+                            </p>
+                        </label>
+                    </div>
+                    <div className="space-x-4">
+                        <Button type="submit" children={_id ? 'Edit product' : 'Add new product'} />
+                        <Button type="button" children="Cancel" onClick={cancelBtnHanler} />
+                    </div>
                 </div>
-
-                <Input
-                    exitingValue={existingPrice}
-                    require={existingPrice ? false : true}
-                    registee={register}
-                    isError={errors.price}
-                    type="number"
-                    placeholder="Product price"
-                    label="Price"
-                    name="price"
-                />
-                <Input
-                    exitingValue={existingDescription}
-                    require={false}
-                    isError={errors.description}
-                    registee={register}
-                    type="text"
-                    placeholder="Description"
-                    label="Description"
-                    name="description"
-                />
-
-                <div className="">
-                    <p>Upload photos</p>
-                    <label className="inline-block">
-                        <input type="file" className="hidden" onChange={onUpLoadImage} />
-                        <p className="w-24 h-24 bg-slate-400/70 rounded-md flex items-center justify-center text-sm font-medium cursor-pointer gap-1 mb-4">
-                            {loading ? (
-                                <CricleLoader size={40} loading={loading} color={'#2463eb'} />
-                            ) : (
-                                <span className="flex">
-                                    <ArrowUpOnSquareIcon width={16} /> Upload
-                                </span>
-                            )}
-                        </p>
-                    </label>
-                </div>
-
-                <Button type="submit" children={_id ? 'Edit product' : 'Add new product'} />
-                <Button type="button" children="Cancel" onClick={cancelBtnHanler} />
             </form>
         </Layout>
     );

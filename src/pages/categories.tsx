@@ -1,9 +1,11 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { Layout } from '@/components';
-import { Button, Input } from '@/utils';
+import { Button } from '@/utils';
 import axios from 'axios';
 
 type Props = {};
+
+const categoryList = ['Iphone', 'Ipad', 'Macbook', 'IMac', 'Watch'];
 
 const Products = (props: Props) => {
     const [categorie, setCategorie] = useState<string>('');
@@ -19,14 +21,22 @@ const Products = (props: Props) => {
         axios.get('api/categories').then((res) => setListCategorie(res.data));
     };
 
+    const checkCategory = listCategorie.forEach((item) => {
+        // return item.categorie.includes(categorie);
+        console.log(item.categorie);
+    });
     const addCategoriesSubmitHanler = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
         const data = {
             parent,
             categorie,
             properties: properties.map((item: PropertyType) => ({ key: item.key, values: item.values.split(',') })),
         };
-        e.preventDefault();
+
         if (categorie === '') return;
+        // if(listCategorie.includes(categorie)) {
+
+        // }
         if (editedCategory) {
             await axios.put('/api/categories', { ...data, _id: editedCategory._id });
             setEditedCategory(null);
@@ -96,19 +106,19 @@ const Products = (props: Props) => {
                 Categories
             </h1>
 
-            <h1 className="mt-10">
+            <h1 className="mt-10 font-semibold text-xl mb-2">
                 {editedCategory ? `Edit category: ${editedCategory.categorie}` : 'Add new category'}
             </h1>
             <form onSubmit={addCategoriesSubmitHanler} className="mb-10">
                 <div>
                     <input
-                        className={` bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500  w-[300px] p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
+                        className="input"
                         type="string"
                         placeholder="New Categories"
                         value={categorie}
                         onChange={(e) => setCategorie(e.target.value)}
                     />
-                    <select value={parent} onChange={(e) => setParent(e.target.value)}>
+                    <select value={parent} onChange={(e) => setParent(e.target.value)} className="input w-[150px] ml-4">
                         <option value="">No category</option>
                         {listCategorie &&
                             listCategorie.map((item) => (
@@ -145,12 +155,14 @@ const Products = (props: Props) => {
                             </div>
                         ))}
                 </div>
-                <Button type="submit" children="Save" />
-                {editedCategory && <Button type="button" children="Cancel" onClick={cancelBtnHanler} />}
+                <div className=" space-x-2 ml-2 my-2">
+                    <Button type="submit" children="Save" />
+                    {editedCategory && <Button type="button" children="Cancel" onClick={cancelBtnHanler} />}
+                </div>
             </form>
             {listCategorie.length > 0 &&
                 listCategorie.map((item) => (
-                    <div key={item._id}>
+                    <div key={item._id} className="ml-2 space-x-4 mb-4">
                         {<span>{item?.categorie}</span>}
                         <span className="mx-4">{item.parent && item.parent?.categorie}</span>
                         <Button onClick={() => editCategory(item)} type="button">
