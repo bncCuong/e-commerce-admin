@@ -118,9 +118,9 @@ export const ProductFrom = ({
             <h1 className="font-bold text-4xl bg-gradient-to-br from-blue-600 via-purple-600 to-pink-700 bg-clip-text text-transparent mb-10 ">
                 {_id ? 'Edit product' : 'Add new product'}
             </h1>
-            <form onSubmit={handleSubmit(addProductSubmitHanler)} className=" space-x-10 lg:flex ml-[15%] ">
+            <form onSubmit={handleSubmit(addProductSubmitHanler)} className=" space-x-10 lg:flex ml-[40%] translate-x-[-50%]">
                 <div>
-                    {_id && (
+                      {_id && (
                         <Card
                             images={existingImages}
                             _id={_id}
@@ -129,8 +129,7 @@ export const ProductFrom = ({
                             existingDescription={existingDescription}
                         />
                     )}
-                    {/* {!!images.length && <Card images={images} _id={_id} upLoadPage={uploadPage} />} */}
-                    <Card images={images} _id={_id} upLoadPage={uploadPage} />
+                    {!!images.length && <Card images={images} _id={_id} upLoadPage={uploadPage} />}
                 </div>
                 <div>
                     <Input

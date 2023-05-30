@@ -19,7 +19,6 @@ const Products = () => {
         fetchProducts();
     }, []);
 
-    console.log(loading);
     return (
         <Layout>
             <Link href="/products/newproduct">

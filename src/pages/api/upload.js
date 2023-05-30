@@ -26,6 +26,9 @@ export default async function uploadImage(req, res) {
             secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
         },
     });
+
+
+
     const links = [];
     for (const file of files.file) {
         //cắt lấy phần đuôi sau dấu chấm của tên ảnh
@@ -42,6 +45,7 @@ export default async function uploadImage(req, res) {
                 ContentType: mime.lookup(file.path),
             }),
         );
+
 
         const link = `https://${bucketName}.s3.amazonaws.com/${newFileName}`;
         links.push(link);

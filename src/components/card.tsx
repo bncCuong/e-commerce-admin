@@ -22,10 +22,12 @@ export const Card = ({
     existingDescription,
     fetchProduct,
 }: ProductType) => {
+
     const deleteProduct = async () => {
         await axios.delete('/api/products?id=' + _id);
         if (fetchProduct) fetchProduct();
     };
+
     return (
         <div className="group object-cover cursor-pointer border-2 relative w-[350px] h-[450px] ml-[10px] rounded-2xl p-2 bg-white shadow-lg inline-flex  flex-col justify-between my-4 hover:scale-105 hover:shadow-2xl animation duration-500 ">
             <div className="absolute top-8 left-0 flex w-full hover:scale-105 animation duration-200  ">
@@ -38,13 +40,13 @@ export const Card = ({
                     creativeEffect={{
                         prev: {
                             shadow: true,
-                            translate: [0, 0, -400],
+                            translate: [0, 0, -500],
                         },
                         next: {
                             translate: ['100%', 0, 0],
                         },
                     }}
-                    className="w-[90%] h-[250px]"
+                    className="w-[100%] h-[280px]"
                     navigation={true}
                     modules={[Pagination, Navigation, EffectCreative, Keyboard]}
                     slidesPerView={1}
@@ -55,7 +57,7 @@ export const Card = ({
                         <>
                             {existingImages?.map((image) => (
                                 <SwiperSlide key={image}>
-                                    <Image src={image as string} className=" object-cover" alt="priduct photo" fill />
+                                    <Image src={image as string} className=" object-contain max-h-[280px] w-full " alt="priduct photo" width={10000} height={1} />
                                 </SwiperSlide>
                             ))}
                         </>
@@ -63,7 +65,7 @@ export const Card = ({
                         <>
                             {images?.map((image) => (
                                 <SwiperSlide key={image}>
-                                    <Image src={image as string} className=" object-cover" alt="priduct photo" fill />
+                                    <Image src={image as string} className=" object-contain max-h-[280px] w-[100%] " alt="priduct photo" width={100000} height={1} />
                                 </SwiperSlide>
                             ))}
                         </>
@@ -75,7 +77,7 @@ export const Card = ({
                 <p className="text-white font-semibold text-xs">Sell off 10%</p>
             </div>
 
-            <div className="absolute   bg-[#f5f5f7] rounded-3xl flex items-center justify-center py-2 px-6 left-[29%] top-[60%] opacity-0 group-hover:animate-movetop z-50">
+            <div className="absolute bg-[#f5f5f7] rounded-3xl flex items-center justify-center py-2 px-6 left-[24%]  top-[60%] opacity-0 group-hover:animate-movetop z-50">
                 <p className="font-semibold">Take a closer look</p>
             </div>
             <div className="absolute bottom-2 ">

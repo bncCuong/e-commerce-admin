@@ -4,6 +4,7 @@ import { Button } from '@/utils';
 import CricleLoader from 'react-spinners/CircleLoader';
 
 import axios from 'axios';
+import { BarLoader } from 'react-spinners';
 
 type Props = {};
 
@@ -15,17 +16,19 @@ const Products = (props: Props) => {
     const [parent, setParent] = useState<string>('');
     const [editedCategory, setEditedCategory] = useState<CategoryType | null>(null);
     const [properties, setProperties] = useState<any>([]);
-    const [loading, setLoading] = useState<boolean>(false);
+    const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
+    const [saveLoading, setSaveLoading] =  useState<boolean>(false);
     useEffect(() => {
         fetchCategories();
     }, []);
 
     const fetchCategories = () => {
         axios.get('api/categories').then((res) => setListCategorie(res.data));
-        setLoading(false);
+        setDeleteLoading(false);
     };
 
     const addCategoriesSubmitHanler = async (e: FormEvent<HTMLFormElement>) => {
+        setSaveLoading(true)
         e.preventDefault();
         const data = {
             parent,
@@ -34,13 +37,16 @@ const Products = (props: Props) => {
                 properties &&
                 properties.map((item: PropertyType) => ({ key: item.key, values: item.values.split(',') })),
         };
-        if (data.categorie === '') return;
+        if (data.categorie === '') {
+            setSaveLoading(false)
+            return
+        };
 
         //check nếu có category trong list categories rồi thì k add thêm
         const hasCategory = listCategorie.some(
             (item) =>
-                item.categorie.toLowerCase().trim().replace(/\s+/g, ' ') ===
-                data.categorie.toLowerCase().trim().replace(/\s+/g, ' '),
+                item.categorie.toLowerCase().replace(/\s+/g, ' ') ===
+                data.categorie.toLowerCase().replace(/\s+/g, ' '),
         );
 
         if (hasCategory === true) {
@@ -57,6 +63,7 @@ const Products = (props: Props) => {
         setProperties([]);
         setParent('');
         fetchCategories();
+        setSaveLoading(false)
     };
 
     const editCategory = (categorie: CategoryType) => {
@@ -72,7 +79,7 @@ const Products = (props: Props) => {
     };
 
     const deleteCategory = async (id: string) => {
-        setLoading(true);
+        setDeleteLoading(true);
         await axios.delete('/api/categories?id=' + id);
         fetchCategories();
     };
@@ -113,6 +120,9 @@ const Products = (props: Props) => {
 
     return (
         <Layout>
+            <div className="absolute top-0 left-0">
+            {deleteLoading &&   <BarLoader loading={deleteLoading} color={'#2463eb'} width={10000}  speedMultiplier={0.4}  />}
+            </div>
             <h1 className="font-bold text-4xl bg-gradient-to-br from-blue-600 via-purple-600 to-pink-700 bg-clip-text text-transparent ">
                 Categories
             </h1>
@@ -167,7 +177,11 @@ const Products = (props: Props) => {
                         ))}
                 </div>
                 <div className=" space-x-2 ml-2 my-2">
-                    <Button type="submit" children="Save" />
+                    <Button type="submit" >
+                        <div className='flex items-center justify-center gap-4'>
+                             Save {saveLoading && <CricleLoader loading={ saveLoading} color="#2463eb" size={16} /> }
+                       </div>
+                    </Button>
 
                     {editedCategory && <Button type="button" children="Cancel" onClick={cancelBtnHanler} />}
                 </div>
@@ -181,11 +195,7 @@ const Products = (props: Props) => {
                             Edit
                         </Button>
                         <Button onClick={() => deleteCategory(item._id)} type="button">
-                            {loading && item._id ? (
-                                <CricleLoader size={20} loading={loading} color={'#2463eb'} />
-                            ) : (
-                                'Delete'
-                            )}
+                                Delete
                         </Button>
                     </div>
                 ))}
